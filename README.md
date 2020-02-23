@@ -1,0 +1,2 @@
+# redux
+implementation of redux
