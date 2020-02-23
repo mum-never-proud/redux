@@ -9,36 +9,32 @@
     window['$R'] = factory();
   }
 })(function() {
-  const $R = {
-    listeners: [],
-    state: {}
-  };
-  let _reducer;
+  const $R = {};
 
-  $R.createStore = (state, reducer) => {
+  $R.createStore = (reducer, state = {}) => {
     if (!reducer) {
       throw Error('reducer must be a function');
     }
 
-   $R.state = Object.freeze(state || $R.state);
-    _reducer = reducer;
+    const store = {
+      listeners: [],
+      state: Object.freeze(state),
+      getState: () => store.state,
+      subscribe: listener => {
+        if (typeof listener === 'function') {
+          return store.listeners.push(listener);
+        }
+        throw Error('listener must be a function');
+      },
+      dispatch: action => {
+        store.state = Object.freeze(reducer(store.state, action));
+        store.listeners.forEach(listener => listener());
+      }
+    };
 
-    return $R;
+    return store;
   };
-  $R.getState = () => $R.state;
-  $R.subscribe = listener => {
-    if (typeof listener === 'function') {
-      $R.listeners.push(listener);
-      return $R;
-    }
-    throw Error('listener must be a function');
-  };
-  $R.dispatch = action => {
-    $R.state = Object.freeze(_reducer($R.state, action));
-    $R.listeners.forEach(listener => listener());
 
-    return $R;
-  };
   $R.combineReducers = reducers => {
     return (state, action) => {
       const nextState = {}, reducerNames = Object.keys(reducers);
