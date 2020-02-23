@@ -9,7 +9,7 @@ describe('redux test', function() {
   it('should initialize state with empty object when no state is provided', function() {
     const store = $R.createStore(null, noop);
 
-    expect(store.state).toEqual({});
+    expect(store.getState()).toEqual({});
   });
 
   it('should not allow mutating the state', function () {

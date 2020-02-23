@@ -15,41 +15,35 @@
   };
   let _reducer;
 
-  $R.createStore = function(state, reducer) {
+  $R.createStore = (state, reducer) => {
     if (!reducer) {
       throw Error('reducer must be a function');
     }
 
-    $R.state = Object.freeze(state || $R.state);
+   $R.state = Object.freeze(state || $R.state);
     _reducer = reducer;
 
     return $R;
   };
-  $R.getState = function() {
-    return $R.state;
-  };
-  $R.subscribe = function (listener) {
+  $R.getState = () => $R.state;
+  $R.subscribe = listener => {
     if (typeof listener === 'function') {
       $R.listeners.push(listener);
       return $R;
     }
     throw Error('listener must be a function');
   };
-  $R.dispatch = function(action) {
+  $R.dispatch = action => {
     $R.state = Object.freeze(_reducer($R.state, action));
-    $R.listeners.forEach(function(listener) {
-      listener();
-    });
+    $R.listeners.forEach(listener => listener());
 
     return $R;
   };
-  $R.combineReducers = function(reducers) {
-    return function combinator(state, action) {
+  $R.combineReducers = reducers => {
+    return (state, action) => {
       const nextState = {}, reducerNames = Object.keys(reducers);
 
-      reducerNames.forEach(function(reducerName) {
-        nextState[reducerName] = reducers[reducerName](state[reducerName], action);
-      });
+      reducerNames.forEach(reducerName => nextState[reducerName] = reducers[reducerName](state[reducerName], action));
 
       return nextState;
     }
