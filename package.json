@@ -9,11 +9,12 @@
   "dependencies": {},
   "devDependencies": {
     "grunt": "1.0.4",
-    "grunt-contrib-uglify": "4.0.1",
+    "grunt-contrib-uglify-es": "3.3.0",
     "jest": "25.1.0"
   },
   "scripts": {
-    "test": "jest"
+    "build": "./node_modules/.bin/grunt",
+    "test": "./node_modules/.bin/jest"
   },
   "repository": {
     "type": "git",
