@@ -28,7 +28,7 @@
       },
       dispatch: action => {
         store.state = Object.freeze(reducer(store.state, action));
-        store.listeners.forEach(listener => listener());
+        store.listeners.forEach(listener => listener(store.state));
       }
     };
 
