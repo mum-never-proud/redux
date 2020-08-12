@@ -32,6 +32,8 @@
       }
     };
 
+    store.dispatch({});
+
     return store;
   };
 
