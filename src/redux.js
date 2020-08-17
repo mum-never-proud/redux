@@ -12,7 +12,7 @@
   const $R = {};
 
   $R.createStore = (reducer, state = {}) => {
-    if (!reducer) {
+    if (typeof reducer !== 'function') {
       throw Error('reducer must be a function');
     }
 
