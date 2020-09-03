@@ -1,14 +1,14 @@
-!(/* istanbul ignore next */ function(factory) {
+(/* istanbul ignore next */function redux(factory) {
   if (typeof exports === 'object' && typeof module !== 'undefined') {
     module.exports = factory();
-  }
-  else if (typeof define === 'function' && define.amd) {
+  // eslint-disable-next-line no-undef
+  } else if (typeof define === 'function' && define.amd) {
+    // eslint-disable-next-line no-undef
     define('$R', factory);
+  } else {
+    window.$R = factory();
   }
-  else {
-    window['$R'] = factory();
-  }
-})(function() {
+}(() => {
   const $R = {};
 
   $R.createStore = (reducer, state = {}) => {
@@ -20,16 +20,16 @@
       listeners: [],
       state: Object.freeze(state),
       getState: () => store.state,
-      subscribe: listener => {
+      subscribe: (listener) => {
         if (typeof listener === 'function') {
           return store.listeners.push(listener);
         }
         throw Error('listener must be a function');
       },
-      dispatch: action => {
+      dispatch: (action) => {
         store.state = Object.freeze(reducer(store.state, action));
-        store.listeners.forEach(listener => listener(store.state));
-      }
+        store.listeners.forEach((listener) => listener(store.state));
+      },
     };
 
     store.dispatch({});
@@ -37,15 +37,16 @@
     return store;
   };
 
-  $R.combineReducers = reducers => {
-    return (state, action) => {
-      const nextState = {}, reducerNames = Object.keys(reducers);
+  $R.combineReducers = (reducers) => (state, action) => {
+    const nextState = {}; const
+      reducerNames = Object.keys(reducers);
 
-      reducerNames.forEach(reducerName => nextState[reducerName] = reducers[reducerName](state[reducerName], action));
+    reducerNames.forEach((reducerName) => {
+      nextState[reducerName] = reducers[reducerName](state[reducerName], action);
+    });
 
-      return nextState;
-    }
+    return nextState;
   };
 
   return $R;
-});
+}));
